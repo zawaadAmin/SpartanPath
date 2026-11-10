@@ -1,0 +1,548 @@
+<title>Spartan Path</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centered column, one question at a time, like a campus orientation card deck */
+:root{
+  --bg:#f3f5fa; --surface:#ffffff; --ink:#111a2e; --muted:#5a6580; --line:#d9deea;
+  --blue:#0055a2; --gold:#e5a823; --gold-ink:#5c3f00; --blue-soft:#e3edf8;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Inter", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1220; --surface:#151d30; --ink:#e9edf6; --muted:#9aa5c0; --line:#2a3550;
+  --blue:#6aa8ec; --gold:#f2bd4b; --gold-ink:#f7d58b; --blue-soft:#18284a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1220; --surface:#151d30; --ink:#e9edf6; --muted:#9aa5c0; --line:#2a3550;
+  --blue:#6aa8ec; --gold:#f2bd4b; --gold-ink:#f7d58b; --blue-soft:#18284a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.mark{width:26px;height:26px;border-radius:6px;background:var(--blue);position:relative;flex:none}
+.mark::after{content:"";position:absolute;left:6px;right:6px;bottom:6px;height:5px;background:var(--gold);border-radius:2px}
+.tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.015em}
+h1{font-size:clamp(30px,6vw,42px);line-height:1.08;font-weight:800}
+h2{font-size:clamp(22px,4.5vw,28px);line-height:1.2;font-weight:700}
+h3{font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+p{margin:0}
+.lede{color:var(--muted);max-width:60ch}
+.stack{display:flex;flex-direction:column;gap:16px}
+.hl{background:linear-gradient(transparent 62%,var(--gold) 62%,var(--gold) 92%,transparent 92%);padding:0 2px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0;padding:0;list-style:none}
+.steps li{border-top:3px solid var(--blue);padding-top:10px;font-size:14px;color:var(--muted)}
+.steps b{display:block;color:var(--ink);font-family:var(--display);font-size:16px}
+@media (max-width:520px){.steps{grid-template-columns:1fr}.card{padding:20px}}
+.btn{font:600 16px var(--body);border:0;border-radius:10px;padding:13px 20px;cursor:pointer;background:var(--blue);color:#fff;align-self:flex-start}
+:root[data-theme="dark"] .btn{color:#0c1220}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#0c1220}}
+.btn.ghost{background:transparent;color:var(--blue);border:1px solid var(--line)}
+.btn:focus-visible,.opt:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.progress{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{flex:1;height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--blue);transition:width .3s}
+.phase{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-ink);background:color-mix(in srgb,var(--gold) 22%,transparent);padding:3px 8px;border-radius:4px;align-self:flex-start}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:500 16px var(--body);text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--blue);background:var(--blue-soft)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.link{background:none;border:0;color:var(--muted);font:500 14px var(--body);cursor:pointer;padding:6px 0}
+.link:hover{color:var(--ink)}
+.result-head{border-left:4px solid var(--gold);padding-left:16px;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:13px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+ul.clean{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{background:var(--blue-soft);color:var(--blue);font-weight:600;font-size:14px;padding:5px 10px;border-radius:999px}
+.next{background:var(--blue-soft);border-radius:10px;padding:14px 16px}
+.next b{color:var(--blue)}
+.scores{display:flex;flex-direction:column;gap:8px}
+.srow{display:grid;grid-template-columns:120px 1fr 24px;align-items:center;gap:10px;font-size:14px;font-variant-numeric:tabular-nums}
+.srow .bar{height:8px}
+.srow.top .bar span{background:var(--gold)}
+.rate{display:flex;gap:8px;flex-wrap:wrap}
+.rate button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 16px var(--body);cursor:pointer}
+.rate button[aria-pressed="true"]{background:var(--blue);color:var(--surface);border-color:var(--blue)}
+.note{font-size:13px;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.search input{width:100%;font:500 16px var(--body);padding:13px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.search input:focus{outline:3px solid var(--gold);outline-offset:1px}
+.mscroll{max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:10px}
+.mlist{list-style:none;margin:0;padding:0}
+.mlist li+li{border-top:1px solid var(--line)}
+.mpick,.mrow{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:11px 14px;font:500 15px var(--body);color:var(--ink);text-align:left;background:none;border:0}
+.mpick{cursor:pointer}.mpick:hover{background:var(--blue-soft)}
+.mpick:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+.mpick span:first-child,.mrow span:first-child{min-width:0}
+.mtags{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.gtag{font-size:12px;color:var(--muted);white-space:nowrap}
+.closed{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--gold-ink);background:color-mix(in srgb,var(--gold) 22%,transparent);padding:2px 6px;border-radius:4px;white-space:nowrap}
+@media (max-width:520px){.gtag{display:none}}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.fbtn{font:600 14px var(--body);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.fbtn span{color:var(--muted);font-variant-numeric:tabular-nums;margin-left:2px}
+.fbtn[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--surface)}
+.fbtn[aria-pressed="true"] span{color:inherit;opacity:.8}
+#bres{border:1px solid var(--line);border-radius:10px}
+.chip.co{background:transparent;border:1px solid var(--line);color:var(--ink)}
+ul.clubs{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ul.clubs li{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+ul.clubs b{font-weight:600}
+ul.clubs span{font-size:14px;color:var(--muted)}
+@media (max-width:520px){ul.clubs{grid-template-columns:1fr}}
+details.more{margin-top:12px}
+details.more summary{cursor:pointer;color:var(--blue);font-weight:600;font-size:14px}
+details.more .mlist{margin-top:8px;border:1px solid var(--line);border-radius:10px}
+a{color:var(--blue)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="mark" aria-hidden="true"></span>Spartan Path</div>
+    <span class="tag">Prototype · v0.1</span>
+  </header>
+  <main id="app" class="card" aria-live="polite"></main>
+  <p class="note">Student-made prototype, not an official SJSU tool. Always confirm majors and requirements in the SJSU catalog and with a department advisor.</p>
+</div>
+
+<script>
+const GROUPS={T:"Tech",E:"Engineering",B:"Business",H:"Health & Science",C:"Creative & People"};
+
+// Official SJSU undergraduate majors, each tagged with the quiz area it fits best
+const MAJORS=`Advertising, BS|C
+Aerospace Engineering, BS|E
+African American Studies, BA|C
+Animation & Illustration, BFA|C
+Anthropology, BA|C
+Anthropology, BA (SJSU Online)|C
+Applied Mathematics, Applied and Computational Mathematics Concentration, BS|T
+Art History and Visual Culture, BA|C
+Art, Digital Media Art Concentration, BFA|C
+Art, Photography Concentration, BFA|C
+Art, Pictorial Art Concentration, BFA|C
+Art, Spatial Art Concentration, BFA|C
+Art, Studio Practice Concentration (Preparation for Teaching), BA|C
+Art, Studio Practice Concentration, BA|C
+Asian American Studies, BA|C
+Aviation, BS|E
+Behavioral Science, BA|C
+Biological Sciences - Ecology and Evolution, BS|H
+Biological Sciences - Marine Biology, BS|H
+Biological Sciences, BA|H
+Biological Sciences, Microbiology Concentration, BS|H
+Biological Sciences, Molecular Biology Concentration, BS|H
+Biological Sciences, Systems Physiology Concentration, BS|H
+Biomedical Engineering, BS|E
+Business Administration, Accounting Concentration, BS|B
+Business Administration, Accounting Information Systems Concentration, BS|B
+Business Administration, Business Analytics Concentration, BS|B
+Business Administration, Corporate Accounting and Finance Concentration, BS|B
+Business Administration, Entrepreneurship Concentration, BS|B
+Business Administration, Finance Concentration, BS|B
+Business Administration, General Business Concentration, BS|B
+Business Administration, General Business Concentration, BS (SJSU Online)|B
+Business Administration, Hospitality, Tourism and Event Management Concentration, BS|B
+Business Administration, Human Resource Management Concentration, BS|B
+Business Administration, International Business Concentration, BS|B
+Business Administration, Management Concentration, BS|B
+Business Administration, Management Information Systems Concentration, BS|T
+Business Administration, Marketing Concentration, BS|B
+Business Administration, Operations and Supply Chain Management Concentration, BS|B
+Chemical Engineering, BS|E
+Chemistry, BA|H
+Chemistry, Biochemistry Concentration, BS|H
+Chemistry, BS|H
+Chicana and Chicano Studies, BA|C
+Child and Adolescent Development, BA|C
+Child and Adolescent Development, Preparation for Teaching W/CSET Waiver, BA|C
+Child and Adolescent Development, Preparation for Teaching, BA|C
+Chinese, BA|C
+Civil Engineering, BS|E
+Climate Science, BS|H
+Communication Studies, BA|C
+Communication Studies, Preparation for Teaching, BA (Not Accepting Students)|C
+Communicative Disorders and Sciences, BS|H
+Computer Engineering, BS|E
+Computer Science and Linguistics, BS|T
+Computer Science, BS|T
+Creative Arts, BA|C
+Dance, BA|C
+Dance, BFA|C
+Data Science, BS|T
+Design Studies, BA|C
+Earth System Science, BS|H
+Economics, BA|B
+Economics, BA (SJSU Online)|B
+Economics, BS|B
+Electrical Engineering, BS|E
+Engineering Technology, Computer Network System Management (CNSM) Concentration, BS|T
+Engineering Technology, Manufacturing Systems Concentration, BS|E
+English, BA|C
+English, Creative Writing Concentration, BA|C
+English, Preparation for Teaching (Single Subject), BA|C
+English, Professional and Technical Writing Concentration, BA|C
+Environmental Studies, BA|H
+Environmental Studies, BS|H
+Environmental Studies, Preparation for Teaching, BA|H
+Forensic Science, Biology Concentration, BS|H
+Forensic Science, Chemistry Concentration, BS|H
+Forensic Science, Crime Scene Investigation Concentration, BS|H
+Forensic Science, Digital Evidence Concentration, BS|T
+French, BA|C
+Geographic Information Science (GIS), BS|T
+Geography, BA|C
+Geology, BS|H
+Global Studies, BA|C
+Graphic Design, BFA|C
+History, BA|C
+Humanities, American Studies Concentration, BA|C
+Humanities, Liberal Arts Concentration, BA|C
+Humanities, Religious Studies Concentration, BA|C
+Industrial and Systems Engineering, BS|E
+Industrial Design, BS|C
+Information Science and Data Analytics, BS|T
+Information Science and Data Analytics, BS (SJSU Online)|T
+Interdisciplinary Engineering, BS|E
+Interdisciplinary Engineering, BS (SJSU Online) (Currently Not Accepting Students)|E
+Interdisciplinary Studies, BA|C
+Interdisciplinary Studies, BS|C
+Interdisciplinary Studies, Educational and Community Leadership Concentration, BA (SJSU Online)|C
+Interdisciplinary Studies, Health Care Leadership Concentration, BS (SJSU Online)|H
+Interior Design, BFA|C
+Japanese, BA|C
+Journalism, BS|C
+Justice Studies, BS|C
+Justice Studies, Criminology Concentration, BS|C
+Kinesiology, BS|H
+Kinesiology, Preparation for Teaching, BS|H
+Liberal Studies, Integrated Teacher Education Program Spanish Bilingual, BA|C
+Liberal Studies, Integrated Teacher Education Program, BA|C
+Liberal Studies, Preparation for Teaching, BA|C
+Linguistics, BA|C
+Materials Engineering, BS|E
+Mathematics, BA|T
+Mathematics, Integrated Teacher Education Program, BA|C
+Mechanical Engineering, BS|E
+Meteorology, BS|H
+Music, BA|C
+Music, Composition Concentration, BM|C
+Music, Jazz Studies Concentration, BM|C
+Music, Music Education Concentration, BM|C
+Music, Performance Concentration, BM|C
+Nursing, BS|H
+Nursing, Concurrent Enrollment Program (CEP) ADN to BSN|H
+Nursing, RN to BSN Concentration, BSN|H
+Nutritional Science, Applied Nutrition and Food Sciences Concentration, BS|H
+Nutritional Science, Dietetics Concentration, BS|H
+Nutritional Science, Food Management Concentration, BS|H
+Packaging, BS|E
+Philosophy, BA|C
+Physics, BA|H
+Physics, BS|H
+Physics, Preparation for Teaching, BA|C
+Political Science, BA|C
+Psychology, BA|C
+Public Health, BS|H
+Public Health, BS (SJSU Online)|H
+Public Health, Concentration in Community Health Education, BS|H
+Public Health, Concentration in Population Data Science, BS|H
+Public Relations, BS|C
+Public Relations, BS (SJSU Online)|C
+Radio-Television-Film, BA|C
+Recreation, BS|C
+Recreation, Recreation Management Concentration, BS|B
+Recreation, Recreation Therapy Concentration, BS|H
+Social Science, Preparation for Teaching (Single Subject), BA|C
+Social Work, BA|C
+Sociology, BA|C
+Sociology, Community Change Concentration, BA (Not Accepting Students)|C
+Sociology, Race and Ethnic Studies Concentration, BA (Not Accepting Students)|C
+Software Engineering, BS|T
+Spanish, BA|C
+Statistics, BS|T
+Theatre Arts, BA|C
+Theatre Arts, Preparation for Teaching, BA (Not accepting students)|C
+Women, Gender, and Sexuality Studies, BA|C`.split("\n").map(l=>{const [n,g]=l.split("|");return {n,g,closed:/not accepting/i.test(n)}});
+
+// Official majors that lead to each career
+const PATHS={
+ swe:["Computer Science, BS","Software Engineering, BS","Computer Engineering, BS","Computer Science and Linguistics, BS"],
+ pm:["Business Administration, Management Information Systems Concentration, BS","Computer Science, BS","Information Science and Data Analytics, BS","Industrial and Systems Engineering, BS"],
+ data:["Data Science, BS","Statistics, BS","Business Administration, Business Analytics Concentration, BS","Information Science and Data Analytics, BS"],
+ cyber:["Computer Science, BS","Forensic Science, Digital Evidence Concentration, BS","Engineering Technology, Computer Network System Management (CNSM) Concentration, BS"],
+ mech:["Mechanical Engineering, BS","Aerospace Engineering, BS","Aviation, BS","Materials Engineering, BS"],
+ ee:["Electrical Engineering, BS","Computer Engineering, BS"],
+ ise:["Industrial and Systems Engineering, BS","Business Administration, Operations and Supply Chain Management Concentration, BS","Engineering Technology, Manufacturing Systems Concentration, BS"],
+ civil:["Civil Engineering, BS"],
+ mkt:["Business Administration, Marketing Concentration, BS","Advertising, BS","Public Relations, BS"],
+ fin:["Business Administration, Finance Concentration, BS","Business Administration, Accounting Concentration, BS","Business Administration, Corporate Accounting and Finance Concentration, BS","Economics, BS"],
+ cons:["Business Administration, Management Concentration, BS","Business Administration, General Business Concentration, BS","Business Administration, Human Resource Management Concentration, BS"],
+ ent:["Business Administration, Entrepreneurship Concentration, BS","Business Administration, General Business Concentration, BS"],
+ nurse:["Nursing, BS"],
+ pt:["Kinesiology, BS","Biological Sciences, Systems Physiology Concentration, BS"],
+ md:["Biological Sciences, Systems Physiology Concentration, BS","Biological Sciences, Molecular Biology Concentration, BS","Chemistry, Biochemistry Concentration, BS"],
+ sci:["Biological Sciences, Molecular Biology Concentration, BS","Biological Sciences, Microbiology Concentration, BS","Chemistry, BS","Biomedical Engineering, BS"],
+ ux:["Graphic Design, BFA","Industrial Design, BS","Design Studies, BA","Animation & Illustration, BFA"],
+ media:["Journalism, BS","Radio-Television-Film, BA","Communication Studies, BA","Public Relations, BS"],
+ psych:["Psychology, BA","Behavioral Science, BA","Social Work, BA"],
+ teach:["Child and Adolescent Development, Preparation for Teaching, BA","Liberal Studies, Preparation for Teaching, BA","Liberal Studies, Integrated Teacher Education Program, BA"]
+};
+
+
+// Real SJSU clubs, taken from SJSU department pages (Nov 2026). [name, what it does]
+const CLUBS={
+ swe:[["Software and Computer Engineering Society (SCE)","Study groups, workshops, and projects for CS and software students"],["Computer Science Club","Networking and a study space in MacQuarrie Hall"],["IEEE Computer Society","Hands-on software and electronics projects"],["Society of Women Engineers (SWE)","Community and career support in engineering"]],
+ pm:[["IDEAS (Innovation, Design, Engineering, Art, and Science)","Innovation and startup projects, open to all majors"],["Management Information Systems Association (MISA)","Where business meets tech, with industry speakers"],["SJSU UX/UI Association","User experience and interface design"],["Spartan Analytics","Data analytics skills and projects"]],
+ data:[["Spartan Analytics","Data analytics skills and projects"],["Management Information Systems Association (MISA)","Business and technology careers"],["Computer Science Club","Networking with CS students"]],
+ cyber:[["Information Security Student Club","Security practice and events"],["The Network Engineering Technology Society (NETS)","Networking, cloud computing, and cybersecurity"],["Computer Science Club","Networking with CS students"]],
+ mech:[["Spartan Racing","Design and race a formula-style car"],["Mini Baja","Build an off-road vehicle for competition"],["American Institute of Aeronautics and Astronautics (AIAA)","Aerospace engineering community"],["American Society of Mechanical Engineers (ASME)","Mechanical engineering community"],["Rocket Club","Design and launch rockets"]],
+ ee:[["Institute of Electrical and Electronics Engineers (IEEE)","Electrical engineering projects and events"],["Robotics Club","Build robots and mechatronics projects"],["Amateur Radio Club","Radio and electronics hobby projects"]],
+ ise:[["Institute of Industrial Engineers (IIE)","Industrial engineering community"],["SJSU Human Factors & Ergonomics Society","Designing systems around people"],["Operations and Supply Chain Management Association","Operations and supply chain careers"]],
+ civil:[["American Society of Civil Engineers (ASCE)","Civil engineering community"],["Concrete Canoe Team","Build a canoe out of concrete for competition"],["Steel Bridge Competition Team","Design and build a steel bridge"],["Institute of Transportation Engineers (ITE)","Roads, transit, and transportation"]],
+ mkt:[["Marketing Association","Marketing careers and campaigns"],["Alpha Kappa Psi","Professional business fraternity"],["Women in Business","Career development for women in business"]],
+ fin:[["The Banking and Investment Association","Banking, investing, and finance"],["Financial Management Association","Finance careers"],["Beta Alpha Psi","Accounting, finance, and information systems"],["Spartan Real Estate Association","Real estate"]],
+ cons:[["Alpha Kappa Psi","Professional business fraternity"],["Association of Latino Professionals For America (ALPFA)","Networking and professional growth, open to all majors"],["Society for Human Resource Management (SHRM)","People and HR careers"],["International Business Association","Global business"]],
+ ent:[["IDEAS (Innovation, Design, Engineering, Art, and Science)","Innovation and entrepreneurship, open to all majors"],["Alpha Kappa Psi","Professional business fraternity"],["Women in Business","Career development for women in business"]],
+ nurse:[["Global Medical Brigades","Health care volunteer trips"],["Biology Students Association","Mentoring, internships, and volunteering"]],
+ pt:[["Biology Students Association","Mentoring, internships, and volunteering"],["Beta Beta Beta","Biology honor society with research and networking"]],
+ md:[["Spartan M.D.","Medical school admissions and MCAT prep"],["Global Medical Brigades","Health care volunteer trips"],["SJSU Pre-Med Psychology","Pre-med community for psychology students"],["SACNAS","Support for Latinx and Indigenous students in science"]],
+ sci:[["Biology Students Association","Mentoring, internships, and volunteering"],["Beta Beta Beta","Biology honor society with research and networking"],["Biomedical Engineering Society (BMES)","Biomedical engineering community"],["SACNAS","Support for Latinx and Indigenous students in science"]],
+ ux:[["SJSU UX/UI Association","User experience and interface design"],["IDEAS (Innovation, Design, Engineering, Art, and Science)","Innovation projects, open to all majors"]],
+ media:[["Spartan Daily","SJSU's student-run newspaper"],["Update News","Weekly student news broadcast"],["The Spear","SJSU sports magazine"]],
+ psych:[["Psi Chi","International honor society in psychology"],["PSYCHed Club","Psychology student club"]],
+ teach:[]
+};
+const CLUBNOTE={
+ nurse:"Also ask the School of Nursing which student nursing groups are active this year.",
+ pt:"Also ask the Kinesiology department about pre-physical therapy groups.",
+ teach:"Ask the Child and Adolescent Development department or the Connie L. Lurie College of Education which education clubs are active this year."
+};
+
+// Example employers that hire for each career, mostly in the Bay Area
+const COMPANIES={
+ swe:["Google","Apple","Adobe","Cisco","PayPal","NVIDIA","Zoom"],
+ pm:["Google","Microsoft","Adobe","LinkedIn","Intuit","Salesforce","eBay"],
+ data:["Meta","Netflix","Intuit","Visa","PayPal","Kaiser Permanente"],
+ cyber:["Palo Alto Networks","Cisco","Fortinet","CrowdStrike","Google"],
+ mech:["Tesla","SpaceX","Lockheed Martin","Boeing","Joby Aviation","NASA Ames"],
+ ee:["NVIDIA","Apple","AMD","Intel","Broadcom","Applied Materials"],
+ ise:["Amazon","Tesla","Apple","Applied Materials","Boeing","Kaiser Permanente"],
+ civil:["Caltrans","Valley Transportation Authority (VTA)","City of San José","AECOM","Kiewit"],
+ mkt:["Google","Adobe","Salesforce","Gap Inc.","Levi Strauss & Co.","Clorox"],
+ fin:["Wells Fargo","Charles Schwab","Visa","Deloitte","PwC","KPMG","EY"],
+ cons:["Deloitte","Accenture","PwC","EY","KPMG","Amazon"],
+ ent:["Y Combinator startups (Work at a Startup)","Startups on Wellfound","Plug and Play Tech Center"],
+ nurse:["Kaiser Permanente","Stanford Health Care","Santa Clara Valley Medical Center","Good Samaritan Hospital","El Camino Health"],
+ pt:["Kaiser Permanente","Stanford Health Care","Santa Clara Valley Medical Center","El Camino Health"],
+ md:["Stanford Health Care","Kaiser Permanente","Santa Clara Valley Medical Center","ScribeAmerica (medical scribe jobs)"],
+ sci:["Genentech","Gilead Sciences","Roche","Bio-Rad","10x Genomics","Stanford Medicine labs"],
+ ux:["Apple","Adobe","Google","Figma","Airbnb","Intuit"],
+ media:["San José Spotlight","KQED","NBC Bay Area","The Mercury News","San Francisco Chronicle"],
+ psych:["Kaiser Permanente","Santa Clara County Behavioral Health Services","Bill Wilson Center","Stanford Medicine research labs"],
+ teach:["San José Unified School District","East Side Union High School District","Santa Clara Unified","Boys & Girls Clubs of Silicon Valley","YMCA of Silicon Valley"]
+};
+const COMPANYTIP={
+ pt:"Before grad school, look for physical therapy aide jobs to get patient hours.",
+ md:"As a student, aim for clinical hours: scribe, medical assistant, or hospital volunteer roles.",
+ nurse:"As a student, look for CNA, hospital volunteer, or patient care assistant roles.",
+ sci:"As a student, ask professors about lab openings before applying to companies.",
+ teach:"As a student, look for tutoring, after-school, and classroom aide jobs.",
+ ent:"Working at an early startup is one of the fastest ways to learn how companies get built.",
+ psych:"As a student, look for research assistant and crisis line volunteer roles."
+};
+const START={q:"First, who are you?",opts:["High school student","SJSU student thinking about switching majors","SJSU student who's undecided"]};
+
+const MAIN=[
+ {q:"Which class have you enjoyed most?",o:[["Computer science or coding","T"],["Physics or shop/robotics","E"],["Economics or business","B"],["Biology or chemistry","H"],["Art, English, or psychology","C"]]},
+ {q:"On a free Saturday, you'd most likely…",o:[["Mess around with an app, game, or website","T"],["Fix or build something with your hands","E"],["Work on a side hustle or sell something","B"],["Watch a documentary about the human body or nature","H"],["Make art or videos, or hang out and talk with friends","C"]]},
+ {q:"In group projects, you're usually the one who…",o:[["Handles the tech stuff","T"],["Figures out how to make the idea actually work","E"],["Makes the plan and keeps everyone on track","B"],["Does the research and checks the facts","H"],["Designs the slides or keeps the group getting along","C"]]},
+ {q:"Which problem would you most want to solve?",o:[["Making technology easier and smarter","T"],["Designing cleaner cars, planes, or energy","E"],["Helping a business grow","B"],["Finding better ways to treat illness","H"],["Telling stories or helping people's mental health","C"]]},
+ {q:"Which sounds like the most fun project?",o:[["Building an app people use every day","T"],["Designing a robot or drone","E"],["Starting your own brand","B"],["Running a lab experiment","H"],["Making a short film or a campaign for a cause","C"]]},
+ {q:"What kind of workplace sounds best?",o:[["A tech company like Google or Apple","T"],["A factory, lab, or company like Tesla or Boeing","E"],["An office downtown or a fast-paced startup","B"],["A hospital, clinic, or research lab","H"],["A studio, agency, school, or nonprofit","C"]]},
+ {q:"Which skill do you most want to get better at?",o:[["Coding","T"],["Designing and building things","E"],["Leading and persuading people","B"],["Understanding science and medicine","H"],["Creativity and communication","C"]]},
+ {q:"How do you like to solve problems?",o:[["Break it into logic and steps","T"],["Test things until something works","E"],["Weigh the costs, benefits, and who's involved","B"],["Gather data and look carefully at the details","H"],["Talk it out and think about how people feel","C"]]},
+ {q:"What matters most to you in a future job?",o:[["Working on new, cutting-edge things","T"],["Seeing something real you built","E"],["Making good money and moving up fast","B"],["Directly helping people's health","H"],["Freedom to be creative or make a difference","C"]]},
+ {q:"Which compliment would make you happiest?",o:[["\"You're so good with computers\"","T"],["\"How did you build that?\"","E"],["\"You'd be a great boss\"","B"],["\"You're so smart and careful\"","H"],["\"You're so creative\" or \"You're a great listener\"","C"]]}
+];
+
+const FOLLOW={
+ T:[{q:"Which part of an app sounds most fun?",o:[["Writing the code that makes it work",["swe"]],["Deciding what features to build and why",["pm"]],["Finding patterns in user data",["data"]],["Protecting it from hackers",["cyber"]]]},
+    {q:"Would you rather work mostly…",o:[["Alone, deep in a hard problem",["swe","cyber"]],["With lots of teams and people",["pm"]],["With numbers and charts",["data"]]]},
+    {q:"Pick a dream task:",o:[["Build a game or app from scratch",["swe"]],["Lead a team launching a new product",["pm"]],["Predict trends with data",["data"]],["Stop a cyber attack",["cyber"]]]}],
+ E:[{q:"What would you rather design?",o:[["Cars, planes, or machines",["mech"]],["Circuits, chips, or electronics",["ee"]],["Better ways for factories or hospitals to run",["ise"]],["Bridges, buildings, or roads",["civil"]]]},
+    {q:"What sounds most satisfying?",o:[["Seeing a machine you designed move",["mech"]],["Getting a device to power on",["ee"]],["Making a process faster and cheaper",["ise"]],["Walking past a building you helped plan",["civil"]]]},
+    {q:"Which workplace sounds coolest?",o:[["SpaceX or Boeing",["mech"]],["Apple or NVIDIA",["ee"]],["Amazon warehouses and logistics",["ise"]],["A city planning or transportation department",["civil"]]]}],
+ B:[{q:"Which job sounds best?",o:[["Creating ads and growing a brand",["mkt"]],["Managing money and investments",["fin"]],["Leading teams and fixing how companies run",["cons"]],["Starting your own company",["ent"]]]},
+    {q:"What are you best at?",o:[["Social media and getting attention",["mkt"]],["Math and spreadsheets",["fin"]],["Organizing people",["cons"]],["Coming up with new ideas",["ent"]]]},
+    {q:"Pick a dream day:",o:[["Running a viral campaign",["mkt"]],["Picking a company to invest in",["fin"]],["Solving a big company's problem",["cons"]],["Pitching your startup to investors",["ent"]]]}],
+ H:[{q:"How do you want to help people?",o:[["Caring for patients directly",["nurse"]],["Helping people recover from injuries",["pt"]],["Diagnosing and treating as a doctor or PA",["md"]],["Doing research in a lab",["sci"]]]},
+    {q:"How do you feel about blood and hospitals?",o:[["Totally fine",["nurse","md"]],["Fine, but I'd rather focus on movement and fitness",["pt"]],["I'd rather be behind the scenes",["sci"]]]},
+    {q:"How long are you willing to be in school?",o:[["About 4 years",["nurse","sci"]],["6–7 years",["pt","md"]],["8+ years, if it's worth it",["md"]]]}],
+ C:[{q:"What sounds most like you?",o:[["Designing logos, websites, or apps",["ux"]],["Writing, reporting, or making videos",["media"]],["Understanding how people think",["psych"]],["Teaching and helping kids",["teach"]]]},
+    {q:"What would you rather make?",o:[["Something that looks good and is easy to use",["ux"]],["A story people share",["media"]],["A real difference in someone's life",["psych","teach"]]]},
+    {q:"Where would you want to work?",o:[["A design studio or tech company",["ux"]],["A newsroom, studio, or your own channel",["media"]],["A clinic or private practice",["psych"]],["A school",["teach"]]]}]
+};
+
+const IMPACT="Some SJSU majors are impacted, which means extra requirements to get in or switch in. Check the department page before planning around it.";
+const CAREERS={
+ swe:{n:"Software Engineer",g:"T",d:"Software engineers design, write, and test the code behind apps, websites, and systems. Most of the day goes to solving problems and reviewing code with teammates.",m:["Computer Science","Software Engineering","Computer Engineering"],c:["Data Structures","Programming in Java or Python","Discrete Math","Software Engineering Processes"],cl:"Coding, hackathon, and computer science clubs",x:"Try a free intro coding course, then go to a hackathon like SJHacks."},
+ pm:{n:"Product Manager",g:"T",d:"Product managers decide what a product should do and why. They talk to users, set priorities, and keep engineers, designers, and business teams moving toward the same goal.",m:["Management Information Systems (MIS)","Business Administration","Computer Science"],c:["Intro to Programming","Systems Analysis and Design","Marketing Principles","Statistics"],cl:"Product management, consulting, and entrepreneurship clubs",x:"Build one small product people actually use, then write up what you learned."},
+ data:{n:"Data Analyst / Data Scientist",g:"T",d:"Data analysts turn raw numbers into answers a team can act on. They clean data, build charts, and sometimes create models that predict what happens next.",m:["Data Science","MIS","Statistics"],c:["Statistics","Databases and SQL","Python for Data Analysis","Data Visualization"],cl:"Data science, analytics, and AI clubs",x:"Learn basic SQL, then analyze a public dataset on something you care about."},
+ cyber:{n:"Cybersecurity Analyst",g:"T",d:"Cybersecurity analysts protect systems from attacks. They watch for threats, test defenses, and respond when something goes wrong.",m:["Computer Science","MIS","Computer Engineering"],c:["Computer Networks","Operating Systems","Information Security","Cryptography basics"],cl:"Cybersecurity and capture-the-flag (CTF) clubs",x:"Try a beginner capture-the-flag challenge online."},
+ mech:{n:"Mechanical / Aerospace Engineer",g:"E",d:"Mechanical and aerospace engineers design things that move, from car parts to aircraft and rockets. They model, build, and test physical designs.",m:["Mechanical Engineering","Aerospace Engineering"],c:["Statics and Dynamics","Thermodynamics","CAD (computer-aided design)","Materials"],cl:"Rocketry, robotics, and engineering competition teams",x:"Join a build team and learn a CAD tool."},
+ ee:{n:"Electrical / Hardware Engineer",g:"E",d:"Electrical engineers design circuits, chips, and electronic devices. They work on everything from phone hardware to power systems.",m:["Electrical Engineering","Computer Engineering"],c:["Circuit Analysis","Digital Logic Design","Electronics","Signals and Systems"],cl:"Electronics, robotics, and hardware hacking clubs",x:"Buy a cheap Arduino kit and build a small project."},
+ ise:{n:"Industrial / Systems Engineer",g:"E",d:"Industrial and systems engineers make organizations run better. They study how work flows through factories, hospitals, and supply chains, then remove waste and delays.",m:["Industrial & Systems Engineering"],c:["Operations Research","Engineering Statistics","Supply Chain and Logistics","Human Factors"],cl:"Industrial engineering, operations, and supply chain clubs",x:"Look up how Amazon or a hospital plans its operations, then talk to an ISE advisor."},
+ civil:{n:"Civil Engineer",g:"E",d:"Civil engineers plan and design the structures cities depend on, like bridges, roads, buildings, and water systems.",m:["Civil Engineering"],c:["Statics","Structural Analysis","Surveying","Transportation Engineering"],cl:"Civil engineering societies and design-build teams",x:"Visit a city planning meeting or a local construction site tour."},
+ mkt:{n:"Marketing Manager",g:"B",d:"Marketers figure out who a product is for and how to reach them. They plan campaigns, run social media, and measure what works.",m:["Marketing","Business Administration"],c:["Marketing Principles","Consumer Behavior","Digital Marketing","Marketing Research"],cl:"Marketing and advertising clubs",x:"Grow a small social account or help a club with its promotion."},
+ fin:{n:"Financial Analyst",g:"B",d:"Financial analysts study numbers to help companies and people make money decisions, like whether to invest, borrow, or cut costs.",m:["Finance","Accounting"],c:["Financial Accounting","Corporate Finance","Investments","Business Statistics"],cl:"Finance, investment, and accounting clubs",x:"Start a practice stock portfolio and track why each pick goes up or down."},
+ cons:{n:"Manager / Consultant",g:"B",d:"Managers and consultants solve business problems and lead teams. Consultants move between companies, while managers grow within one.",m:["Management","Business Administration"],c:["Organizational Behavior","Operations Management","Business Strategy","Business Communication"],cl:"Consulting, case competition, and leadership clubs",x:"Enter a case competition, even as a beginner."},
+ ent:{n:"Entrepreneur",g:"B",d:"Entrepreneurs start new businesses. They find a problem, build a solution, find customers, and raise or earn money to keep going.",m:["Entrepreneurship / Management","Business Administration"],c:["Entrepreneurship","Marketing Principles","Accounting","Business Law"],cl:"Entrepreneurship and startup clubs",x:"Sell something small this month and write down what you learned."},
+ nurse:{n:"Registered Nurse",g:"H",d:"Nurses care for patients directly. They give treatments, watch for changes, and explain care to patients and families.",m:["Nursing"],c:["Anatomy and Physiology","Microbiology","Pharmacology","Clinical rotations"],cl:"Pre-nursing and health care clubs",x:"Nursing admission is very competitive. Meet with a pre-nursing advisor early."},
+ pt:{n:"Physical Therapist",g:"H",d:"Physical therapists help people recover movement after injuries or surgery. It requires a doctoral degree after your bachelor's.",m:["Kinesiology","then a Doctor of Physical Therapy program"],c:["Anatomy","Exercise Physiology","Biomechanics","Motor Learning"],cl:"Pre-PT and kinesiology clubs",x:"Shadow or volunteer at a physical therapy clinic."},
+ md:{n:"Doctor / Physician Assistant",g:"H",d:"Doctors and physician assistants diagnose and treat patients. Both need graduate school after a bachelor's degree with pre-med classes.",m:["Biology","or any major plus pre-med or pre-PA classes"],c:["General and Organic Chemistry","Biology","Physics","Biochemistry"],cl:"Pre-med and pre-health clubs",x:"Meet with SJSU's pre-health advising and start getting clinical hours."},
+ sci:{n:"Research Scientist",g:"H",d:"Research scientists run experiments to answer questions about living things and chemicals. Many work in biotech labs across the Bay Area.",m:["Biology","Chemistry","Biomedical Engineering"],c:["Cell Biology","Genetics","Organic Chemistry","Lab methods"],cl:"Biology, chemistry, and undergraduate research groups",x:"Email a professor whose research interests you and ask about lab openings."},
+ ux:{n:"Graphic / UX Designer",g:"C",d:"Designers make things look good and easy to use, from logos to app screens. UX designers also research how people use a product.",m:["Graphic Design","Design","Industrial Design"],c:["Design Fundamentals","Typography","Interaction Design","User Research"],cl:"Design and UX clubs",x:"Learn Figma and redesign an app screen you find confusing."},
+ media:{n:"Journalist / Content Creator",g:"C",d:"Journalists and creators find stories and tell them through writing, video, audio, or social media.",m:["Journalism","Radio, Television & Film (RTVF)","Communication Studies"],c:["News Writing","Video Production","Media Law","Digital Storytelling"],cl:"Student newspaper, radio, and film clubs",x:"Pitch a story to the campus newspaper or start a short video series."},
+ psych:{n:"Psychologist / Counselor",g:"C",d:"Psychologists and counselors help people with their thoughts, feelings, and behavior. Most counseling roles need a master's or doctorate.",m:["Psychology","then a graduate program"],c:["Intro Psychology","Research Methods","Developmental Psychology","Abnormal Psychology"],cl:"Psychology and peer mentoring clubs",x:"Volunteer as a peer mentor or tutor to see if you like helping one-on-one."},
+ teach:{n:"Teacher",g:"C",d:"Teachers plan lessons and help students learn. In California you need a bachelor's degree plus a teaching credential.",m:["Child & Adolescent Development","or a subject major plus a credential program"],c:["Child Development","Learning and Cognition","Classroom practice","Your subject area"],cl:"Education and tutoring clubs",x:"Tutor a younger student for a few weeks."}
+};
+
+let state;
+const app=document.getElementById("app");
+function reset(){state={stage:"intro",who:null,current:null,i:0,answers:[],fi:0,fanswers:[],rating:null,bg:"",bq:""}}
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function groupScores(){const s={T:0,E:0,B:0,H:0,C:0};state.answers.forEach(g=>s[g]++);return s}
+function topGroup(){const s=groupScores();return Object.keys(s).reduce((a,b)=>s[b]>s[a]?b:a)}
+function topCareer(g){const s={};FOLLOW[g].forEach(fq=>fq.o.forEach(o=>o[1].forEach(k=>s[k]=s[k]||0)));
+  state.fanswers.forEach(ks=>ks.forEach(k=>s[k]++));
+  return Object.keys(s).reduce((a,b)=>s[b]>s[a]?b:a)}
+
+function progress(step,total,label){
+  return `<div class="progress"><span>${step} / ${total}</span><div class="bar"><span style="width:${step/total*100}%"></span></div></div><span class="phase">${label}</span>`}
+
+function question(q,opts,step,total,label,showBack){
+  app.innerHTML=`<div class="stack">${progress(step,total,label)}<h2>${esc(q)}</h2>
+  <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>
+  <div class="nav">${showBack?'<button class="link" id="back">← Back</button>':'<span></span>'}<button class="link" id="restart">Start over</button></div></div>`;
+  app.querySelector(".opt").focus({preventScroll:true});
+}
+
+function majorList(list,pickable){
+  if(!list.length)return `<p class="note">No majors match that search.</p>`;
+  return `<ul class="mlist">${list.map(m=>`<li>${pickable?`<button class="mpick" data-n="${esc(m.n)}">`:"<div class=\"mrow\">"}<span>${esc(m.n)}</span><span class="mtags">${m.closed?'<span class="closed">Not accepting</span>':""}<span class="gtag">${GROUPS[m.g]}</span></span>${pickable?"</button>":"</div>"}</li>`).join("")}</ul>`}
+
+function filterMajors(q,g){q=q.trim().toLowerCase();return MAJORS.filter(m=>(!g||m.g===g)&&(!q||m.n.toLowerCase().includes(q)))}
+
+function picker(){
+  app.innerHTML=`<div class="stack">${progress(1,14,"About you")}<h2>What's your current major?</h2>
+    <label class="search"><span class="sr">Search majors</span><input id="msearch" type="search" placeholder="Search ${MAJORS.length} SJSU majors" autocomplete="off"></label>
+    <div id="mres" class="mscroll">${majorList(MAJORS,true)}</div>
+    <div class="nav"><button class="link" id="back">← Back</button><button class="link" id="skip">I'd rather not say</button></div></div>`;
+  const inp=document.getElementById("msearch"),res=document.getElementById("mres");
+  const wire=()=>res.querySelectorAll(".mpick").forEach(b=>b.onclick=()=>{state.current=b.dataset.n;state.stage="main";state.i=0;render()});
+  inp.oninput=()=>{res.innerHTML=majorList(filterMajors(inp.value),true);wire()};wire();inp.focus({preventScroll:true});
+  document.getElementById("back").onclick=()=>{state.stage="who";render()};
+  document.getElementById("skip").onclick=()=>{state.current=null;state.stage="main";state.i=0;render()};
+}
+
+function browse(){
+  const g=state.bg||"";
+  app.innerHTML=`<div class="stack"><button class="link" id="home" style="align-self:flex-start">← Back to start</button>
+    <h2>All SJSU majors</h2>
+    <p class="lede">Every undergraduate major, sorted into the five quiz areas. Tap an area to filter.</p>
+    <div class="filters">${[["","All"],...Object.entries(GROUPS)].map(([k,v])=>`<button class="fbtn" data-g="${k}" aria-pressed="${g===k}">${v} <span>${(k?MAJORS.filter(m=>m.g===k):MAJORS).length}</span></button>`).join("")}</div>
+    <label class="search"><span class="sr">Search majors</span><input id="bsearch" type="search" placeholder="Search majors" autocomplete="off" value="${esc(state.bq||"")}"></label>
+    <div id="bres">${majorList(filterMajors(state.bq||"",g),false)}</div>
+    <button class="btn" id="go">Take the quiz</button></div>`;
+  const inp=document.getElementById("bsearch");
+  inp.oninput=()=>{state.bq=inp.value;document.getElementById("bres").innerHTML=majorList(filterMajors(inp.value,g),false)};
+  app.querySelectorAll(".fbtn").forEach(b=>b.onclick=()=>{state.bg=b.dataset.g;browse()});
+  document.getElementById("home").onclick=()=>{reset();render()};
+  document.getElementById("go").onclick=()=>{state.stage="who";render()};
+}
+
+function render(){
+  const total=1+MAIN.length+3;
+  if(state.stage==="browse")return browse();
+  if(state.stage==="current")return picker();
+  if(state.stage==="intro"){
+    app.innerHTML=`<div class="stack">
+      <h1>Find the <span class="hl">SJSU major</span> that fits the career you want.</h1>
+      <p class="lede">For high schoolers looking at SJSU and Spartans thinking about switching majors. Answer 14 quick questions and get a career match with the majors, classes, and next steps that lead there.</p>
+      <ul class="steps">
+        <li><b>10 questions</b>Find your strongest area</li>
+        <li><b>3 follow-ups</b>Narrow it to a career</li>
+        <li><b>Your path</b>Majors, classes, clubs</li>
+      </ul>
+      <div class="nav" style="justify-content:flex-start"><button class="btn" id="go">Start the quiz</button><button class="btn ghost" id="browse">Browse all ${MAJORS.length} majors</button></div>
+      <p class="note">About 3 minutes. Nothing you answer is saved or sent anywhere.</p></div>`;
+    document.getElementById("go").onclick=()=>{state.stage="who";render()};
+    document.getElementById("browse").onclick=()=>{state.stage="browse";render()};return;
+  }
+  if(state.stage==="who"){question(START.q,START.opts,1,total,"About you",false);bind(k=>{state.who=k;if(k===1){state.stage="current"}else{state.current=null;state.stage="main";state.i=0}render()});return}
+  if(state.stage==="main"){const q=MAIN[state.i];question(q.q,q.o.map(o=>o[0]),2+state.i,total,"Part 1 · Your strengths",true);
+    bind(k=>{state.answers[state.i]=q.o[k][1];state.i++;if(state.i>=MAIN.length){state.stage="follow";state.fi=0;state.fanswers=[]}render()});return}
+  if(state.stage==="follow"){const g=topGroup();const q=FOLLOW[g][state.fi];
+    question(q.q,q.o.map(o=>o[0]),2+MAIN.length+state.fi,total,`Part 2 · ${GROUPS[g]} careers`,true);
+    bind(k=>{state.fanswers[state.fi]=q.o[k][1];state.fi++;if(state.fi>=3)state.stage="result";render()});return}
+  if(state.stage==="result")return result();
+}
+
+function bind(onPick){
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>onPick(+b.dataset.k));
+  const back=document.getElementById("back");
+  if(back)back.onclick=()=>{
+    if(state.stage==="main"){if(state.i===0)state.stage=state.who===1?"current":"who";else state.i--}
+    else if(state.stage==="follow"){if(state.fi===0){state.stage="main";state.i=MAIN.length-1}else state.fi--}
+    render()};
+  document.getElementById("restart").onclick=()=>{reset();render()};
+}
+
+function result(){
+  const g=topGroup(),key=topCareer(g),c=CAREERS[key],s=groupScores();
+  const others=Object.keys(CAREERS).filter(k=>CAREERS[k].g===g&&k!==key).map(k=>CAREERS[k].n);
+  const switching=state.who===1;
+  const order=Object.keys(s).sort((a,b)=>s[b]-s[a]);
+  const cur=state.current,curM=cur&&MAJORS.find(m=>m.n===cur);
+  let switchNote="";
+  if(cur){const fits=PATHS[key].includes(cur);
+    switchNote=`<div class="next"><b>You're in ${esc(cur)}.</b> ${fits?"Good news: your current major already leads to this career. Talk to your advisor about classes and experience that point you toward it.":curM&&curM.g===g?"Your major is in the same area as this match, so some of your classes may already count. Ask an advisor which ones transfer.":"This match is in a different area from your major. Before switching, take one intro class in a major above and see if you like it."}</div>`}
+  const groupMajors=MAJORS.filter(m=>m.g===g&&!PATHS[key].includes(m.n));
+  const extra=`<details class="more"><summary>See all ${groupMajors.length} other ${GROUPS[g]} majors</summary>${majorList(groupMajors,false)}</details>`;
+  app.innerHTML=`<div class="stack" style="gap:24px">
+    <div class="result-head"><span class="eyebrow">Your top match in ${GROUPS[g]}</span><h1>${c.n}</h1></div>
+    <p>${c.d}</p>
+    <div><h3>SJSU majors that lead here</h3><div class="chips">${PATHS[key].map(m=>`<span class="chip">${esc(m)}</span>`).join("")}</div>${extra}</div>
+    ${switchNote}
+    <div><h3>Classes you'd take</h3><ul class="clean">${c.c.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+    <div><h3>Companies to apply to</h3><div class="chips">${COMPANIES[key].map(x=>`<span class="chip co">${esc(x)}</span>`).join("")}</div>
+      <p class="note" style="margin-top:8px">${COMPANYTIP[key]?COMPANYTIP[key]+" ":""}Search each company's careers page for internships, usually posted in the fall for the next summer. Handshake, SJSU's job board, lists roles open to Spartans.</p></div>
+    <div><h3>SJSU clubs to join</h3>
+      ${CLUBS[key].length?`<ul class="clubs">${CLUBS[key].map(([n,d])=>`<li><b>${esc(n)}</b><span>${esc(d)}</span></li>`).join("")}</ul>`:""}
+      <p class="note" style="margin-top:8px">${CLUBNOTE[key]?CLUBNOTE[key]+" ":""}Club lists change each year. See every group on <a href="https://sjsu.edu/getinvolved/student-orgs/index.php" target="_blank" rel="noopener">SJSU's student organizations page</a>.</p></div>
+    <div><h3>${switching?"Switching into these majors":state.who===0?"Getting in as a new student":"Declaring one of these majors"}</h3>
+      <p style="margin-top:6px">${IMPACT} Major details live in the <a href="https://catalog.sjsu.edu/" target="_blank" rel="noopener">SJSU catalog</a>.</p></div>
+    <div class="next"><b>Try this next:</b> ${c.x}</div>
+    <div><h3>Your strengths</h3><div class="scores" style="margin-top:10px">${order.map(k=>`<div class="srow ${k===g?"top":""}"><span>${GROUPS[k]}</span><div class="bar"><span style="width:${s[k]/MAIN.length*100}%"></span></div><span>${s[k]}</span></div>`).join("")}</div></div>
+    <p class="note">Also worth exploring in ${GROUPS[g]}: ${others.join(", ")}.</p>
+    <div class="stack" style="gap:10px;border-top:1px solid var(--line);padding-top:20px">
+      <h3>How accurate was this?</h3>
+      <div class="rate" role="group" aria-label="Rate accuracy from 1 to 5">${[1,2,3,4,5].map(n=>`<button data-r="${n}" aria-pressed="${state.rating===n}">${n}</button>`).join("")}</div>
+      <p class="note" id="thanks">${state.rating?"Thanks for rating.":"1 means way off, 5 means spot on."}</p>
+    </div>
+    <div class="nav"><button class="btn" id="again">Take it again</button></div>
+  </div>`;
+  app.querySelectorAll(".rate button").forEach(b=>b.onclick=()=>{state.rating=+b.dataset.r;result()});
+  document.getElementById("again").onclick=()=>{reset();render()};
+}
+
+reset();render();
+</script>
