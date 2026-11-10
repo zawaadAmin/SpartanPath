@@ -1,2 +1,2 @@
 # SpartanPath
-Helps kids decide what to major in at SJSU
+Helps Students decide what to major in at SJSU
